@@ -1,9 +1,8 @@
 class AuthorEmailsController < ApplicationController
   def index
-    @author_emails = Owner.find(params[:owner_id]).repos.find(params[:repo_id]).author_emails
-
-    @owner = params[:owner_id]
-    @repo = params[:repo_id]
+    @owner = Owner.find(params[:owner_id])
+    @repo = Repo.find(params[:repo_id])
+    @author_emails = @repo.author_emails
   end
 
   def show

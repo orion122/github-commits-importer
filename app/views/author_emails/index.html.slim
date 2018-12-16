@@ -1,11 +1,18 @@
-= link_to 'Back', owner_repos_path
+=> link_to 'Back to Repos', owner_repos_path
 
-table
+table border=1
   thead
     tr
-      th Author emails
+      th Owner
+      th Repo
+  tbody
+    tr
+      td = @owner.name
+      td = @repo.name
+    tr
+      th colspan=2 Author emails
   tbody
     - unless @author_emails.nil?
       - @author_emails.each do |author_email|
         tr
-          td = link_to author_email.email, owner_repo_author_email_commits_path(@owner, @repo, author_email)
+          td colspan=2 = link_to author_email.email, owner_repo_author_email_commits_path(@owner, @repo, author_email)

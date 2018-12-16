@@ -1,7 +1,12 @@
-= link_to 'Back', owners_path
+= link_to 'Back to Owners', owners_path
 
-table
+table border=1
   thead
+    tr
+      th Owner
+  tbody
+    tr
+      td = @owner.name
     tr
       th Repos
   tbody

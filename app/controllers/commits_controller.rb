@@ -2,7 +2,10 @@ class CommitsController < ApplicationController
   def welcome; end
 
   def index
-    @commits = Owner.find(params[:owner_id]).repos.find(params[:repo_id]).author_emails.find(params[:author_email_id]).commits
+    @owner = Owner.find(params[:owner_id])
+    @repo = Repo.find(params[:repo_id])
+    @author_email = AuthorEmail.find(params[:author_email_id])
+    @commits = @repo.author_emails.find(params[:author_email_id]).commits
   end
 
   def get_by_api
