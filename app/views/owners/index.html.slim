@@ -1,0 +1,9 @@
+table
+  thead
+    tr
+      th Owners
+  tbody
+    - unless @owners.nil?
+      - @owners.each do |owner|
+        tr
+          td = link_to owner.name, owner_repos_path(owner)

@@ -1,0 +1,15 @@
+=> link_to('Owners', '/owners')
+/ '|
+/ =< link_to('Repos', '/repos')
+
+= form_with(url: 'get_by_api', local: true, method: 'post') do
+  = label_tag(:owner, 'Owner:')
+  = text_field_tag(:owner, 'orion122')
+
+  = label_tag(:repo, 'Repo:')
+  = text_field_tag(:repo, 'BotBoobot')
+
+  = label_tag(:author, 'Author email:')
+  = text_field_tag(:author_email, nil, type: :email)
+
+  = submit_tag 'Get commits'

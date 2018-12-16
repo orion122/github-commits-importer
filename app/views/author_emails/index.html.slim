@@ -1,0 +1,9 @@
+table
+  thead
+    tr
+      th Author emails
+  tbody
+    - unless @author_emails.nil?
+      - @author_emails.each do |author_email|
+        tr
+          td = link_to author_email.email, owner_repo_author_email_commits_path(@owner, @repo, author_email)

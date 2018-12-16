@@ -1,0 +1,9 @@
+table
+  thead
+    tr
+      th Commits
+  tbody
+    - unless @commits.nil?
+      - @commits.each do |commit|
+        tr
+          td = commit.message
