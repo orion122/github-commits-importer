@@ -13,7 +13,7 @@ class CommitsController < ApplicationController
     repo = params[:repo]
     author_email = params[:author_email]
 
-    client = Octokit::Client.new(:login => 'orion122', :password => '***REMOVED***')
+    client = Octokit::Client.new()
 
     unless owner.nil? and repo.nil? and author_email.nil?
       client.list_commits("#{owner}/#{repo}")
@@ -26,7 +26,7 @@ class CommitsController < ApplicationController
         messages.concat(messages_from_response(last_response, author_email))
       end
 
-      save_commits(owner, repo, author_email, messages)
+      save_commits(owner, repo, author_email, messages) if messages.any?
     end
   end
 
@@ -48,8 +48,14 @@ class CommitsController < ApplicationController
     repo = owner.repos.where(name: repo_name).first_or_create
     author_email = repo.author_emails.where(email: email).first_or_create
 
-    messages.each do |message|
-      author_email.commits.create(message: message)
+    commits_old = repo.commits.where(author_email: author_email)
+
+    commits_old.transaction do
+      commits_old.destroy_all
+
+      messages.each do |message|
+        author_email.commits.create(message: message)
+      end
     end
   end
 end
