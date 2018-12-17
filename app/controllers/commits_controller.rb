@@ -36,7 +36,7 @@ class CommitsController < ApplicationController
   def messages_from_response(last_response, author_email)
     messages = []
     last_response.data.each do |commit|
-      messages << commit.commit.message if commit.commit.author.email == author_email
+      messages << { message: commit.commit.message } if commit.commit.author.email == author_email
     end
     messages
   end
@@ -50,10 +50,7 @@ class CommitsController < ApplicationController
 
     commits_old.transaction do
       commits_old.destroy_all
-
-      messages.each do |message|
-        author_email.commits.create(message: message)
-      end
+      author_email.commits.create(messages)
     end
   end
 end
