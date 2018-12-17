@@ -1,6 +1,6 @@
 => link_to('Owners', '/owners')
 
-= form_with(url: 'get_by_api', local: true, method: 'post') do
+= form_with(url: 'import', local: true, method: 'post') do
   = label_tag(:owner, 'Owner:')
   = text_field_tag(:owner, 'orion122')
 
@@ -10,4 +10,4 @@
   = label_tag(:author, 'Author email:')
   = text_field_tag(:author_email, nil, type: :email)
 
-  = submit_tag 'Save commits'
+  = submit_tag 'Import commits'

@@ -5,7 +5,7 @@ $(document).on 'click', '.remove_commit', (event) ->
   commit_ids = $(':checked').map(->  $(this).val()).get()
   $(':checked').closest('tr').remove()
   $.ajax({
-    url: '/destroy_commits',
+    url: '/destroy',
     type: 'DELETE'
     data: { 'commit_ids': commit_ids }
   });

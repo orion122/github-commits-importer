@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  root 'commits#welcome'
-  post '/get_by_api', to: 'commits#get_by_api'
-  post '/save_commits', to: 'commits#save_commits'
-  delete '/destroy_commits', to: 'commits#destroy_commits'
+  root 'welcome#welcome'
+  post '/import', to: 'commits#import'
+  post '/save', to: 'commits#save'
+  delete '/destroy', to: 'commits#destroy'
 
   resources :owners, only: [:index] do
     resources :repos, only: [:index] do

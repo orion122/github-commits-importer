@@ -1,6 +1,4 @@
 class CommitsController < ApplicationController
-  def welcome; end
-
   def index
     @owner = Owner.find(params[:owner_id])
     @repo = Repo.find(params[:repo_id])
@@ -8,7 +6,7 @@ class CommitsController < ApplicationController
     @commits = @repo.author_emails.find(params[:author_email_id]).commits.page(params[:page]).per(10)
   end
 
-  def get_by_api
+  def import
     owner = params[:owner]
     repo = params[:repo]
     author_email = params[:author_email]
@@ -26,11 +24,11 @@ class CommitsController < ApplicationController
         messages.concat(messages_from_response(last_response, author_email))
       end
 
-      save_commits(owner, repo, author_email, messages) if messages.any?
+      save(owner, repo, author_email, messages) if messages.any?
     end
   end
 
-  def destroy_commits
+  def destroy
     Commit.destroy(params[:commit_ids])
   end
 
@@ -43,7 +41,7 @@ class CommitsController < ApplicationController
     messages
   end
 
-  def save_commits(owner_name, repo_name, email, messages)
+  def save(owner_name, repo_name, email, messages)
     owner = Owner.where(name: owner_name).first_or_create
     repo = owner.repos.where(name: repo_name).first_or_create
     author_email = repo.author_emails.where(email: email).first_or_create
