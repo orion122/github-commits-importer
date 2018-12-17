@@ -1,6 +1,4 @@
 => link_to('Owners', '/owners')
-/ '|
-/ =< link_to('Repos', '/repos')
 
 = form_with(url: 'get_by_api', local: true, method: 'post') do
   = label_tag(:owner, 'Owner:')
@@ -12,4 +10,4 @@
   = label_tag(:author, 'Author email:')
   = text_field_tag(:author_email, nil, type: :email)
 
-  = submit_tag 'Get commits'
+  = submit_tag 'Save commits'
