@@ -27,9 +27,11 @@ class CommitsController < ApplicationController
       end
 
       save_commits(owner, repo, author_email, messages)
-
-      # redirect_to action: :show_received_by_api, commits: messages
     end
+  end
+
+  def destroy_commits
+    Commit.destroy(params[:commit_ids])
   end
 
   private

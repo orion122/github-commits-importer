@@ -10,9 +10,11 @@ table border=1
       td = link_to @repo.name, owner_repo_author_emails_path
       td = @author_email.email
     tr
-      th colspan=3 Commits
+      th colspan=2 Commits
+      th = button_tag 'Remove', class: 'remove_commit'
   tbody
     - unless @commits.nil?
       - @commits.each do |commit|
         tr
-          td colspan=3 = commit.message
+          td colspan=2 = commit.message
+          td = check_box_tag 'remove', commit.id
