@@ -5,7 +5,7 @@ class CommitsController < ApplicationController
     @owner = Owner.find(params[:owner_id])
     @repo = Repo.find(params[:repo_id])
     @author_email = AuthorEmail.find(params[:author_email_id])
-    @commits = @repo.author_emails.find(params[:author_email_id]).commits
+    @commits = @repo.author_emails.find(params[:author_email_id]).commits.page(params[:page]).per(10)
   end
 
   def get_by_api

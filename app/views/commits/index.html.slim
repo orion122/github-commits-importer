@@ -18,3 +18,5 @@ table border=1
         tr
           td colspan=2 = commit.message
           td = check_box_tag 'remove', commit.id
+
+= paginate @commits, theme: 'twitter-bootstrap-4'
