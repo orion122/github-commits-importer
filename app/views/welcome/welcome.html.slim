@@ -10,4 +10,7 @@
   = label_tag(:author, 'Author email:')
   = text_field_tag(:author_email, nil, type: :email)
 
-  = submit_tag 'Import commits'
+  = button_tag 'Import commits'
+
+- flash.each do |type, message|
+  = message
