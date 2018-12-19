@@ -37,7 +37,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'slim'
-gem 'octokit'
+gem 'github_api'
 gem 'jquery-rails'
 gem 'bootstrap'
 gem 'kaminari'

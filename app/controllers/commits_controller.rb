@@ -7,32 +7,27 @@ class CommitsController < ApplicationController
   end
 
   def import
-    if params.has_key?(:owner) && params.has_key?(:repo) && params.has_key?(:author_email)
-      owner = params[:owner]
-      repo = params[:repo]
-      author_email = params[:author_email]
-      client = Octokit::Client.new()
+    owner = params[:owner]
+    repo = params[:repo]
+    author_email = params[:author_email]
 
-      begin
-        client.list_commits("#{owner}/#{repo}")
-        last_response = client.last_response
-        messages = []
-        messages.concat(messages_from_response(last_response, author_email))
+    begin
+      github = Github.new(auto_pagination: true)
+      commits_data = github.repos.commits.all(owner, repo)
 
-        until last_response.rels[:next].nil?
-          last_response = last_response.rels[:next].get
-          messages.concat(messages_from_response(last_response, author_email))
-        end
-
-        if messages.any?
-          flash[:notice] = save?(owner, repo, author_email, messages) ? 'Commits successfully imported' : "Commits doesn't imported"
-        else
-          flash[:notice] = 'Commits not found'
-        end
-
-      rescue Octokit::NotFound
-        flash[:notice] = "#{owner}/#{repo} not found"
+      messages = commits_data.map do |commit_data|
+        { message: commit_data.commit.message } if commit_data.commit.author.email == author_email
       end
+
+      unless messages.any?
+        flash[:notice] = 'Commits not found'
+        redirect_back(fallback_location: root_path) and return
+      end
+
+      flash[:notice] = save?(owner, repo, author_email, messages) ? 'Commits imported' : 'Commits doesn\'t imported'
+
+    rescue Github::Error::NotFound
+      flash[:notice] = 'Not found owner/repo'
     end
 
     redirect_back(fallback_location: root_path)
@@ -43,14 +38,6 @@ class CommitsController < ApplicationController
   end
 
   private
-  def messages_from_response(last_response, author_email)
-    messages = []
-    last_response.data.each do |commit|
-      messages << { message: commit.commit.message } if commit.commit.author.email == author_email
-    end
-    messages
-  end
-
   def save?(owner_name, repo_name, email, messages)
     owner = Owner.where(name: owner_name).first_or_create
     repo = owner.repos.where(name: repo_name).first_or_create
