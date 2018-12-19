@@ -34,6 +34,10 @@ RSpec.describe CommitsController, type: :controller do
       it 'create author email' do
         expect(AuthorEmail.last.email).to eq(author_email)
       end
+
+      it 'flashes a success message' do
+        expect(flash[:success]).to eq('Commits imported')
+      end
     end
 
     context 'with nonexistent email' do
@@ -61,6 +65,41 @@ RSpec.describe CommitsController, type: :controller do
 
       it "doesn't create author email" do
         expect(AuthorEmail.count).to eq(0)
+      end
+
+      it 'flashes a notice message' do
+        expect(flash[:notice]).to eq('Commits not found')
+      end
+    end
+
+    context 'with empty owner and repo' do
+      before do
+        VCR.use_cassette('empty_fields') do
+          post :import, params: {
+              owner: '',
+              repo: ''
+          }
+        end
+      end
+
+      it "doesn't import commits to database" do
+        expect(Commit.count).to eq(0)
+      end
+
+      it "doesn't create owner" do
+        expect(Owner.count).to eq(0)
+      end
+
+      it "doesn't create repo" do
+        expect(Repo.count).to eq(0)
+      end
+
+      it "doesn't create author email" do
+        expect(AuthorEmail.count).to eq(0)
+      end
+
+      it 'flashes a notice message' do
+        expect(flash[:notice]).to eq('Not found owner/repo')
       end
     end
   end
