@@ -24,7 +24,11 @@ class CommitsController < ApplicationController
         redirect_back(fallback_location: root_path) and return
       end
 
-      flash[:notice] = save?(owner, repo, author_email, messages) ? 'Commits imported' : 'Commits doesn\'t imported'
+      if save?(owner, repo, author_email, messages)
+        flash[:success] = 'Commits imported'
+      else
+        flash[:notice] = 'Commits doesn\'t imported'
+      end
 
     rescue Github::Error::NotFound
       flash[:notice] = 'Not found owner/repo'
