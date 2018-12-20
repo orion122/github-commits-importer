@@ -1,12 +1,11 @@
-= link_to 'Back to Owners', owners_path
+nav aria-label='breadcrumb'
+  ol class='breadcrumb'
+    li class='breadcrumb-item active'
+      a href=owners_path Owners
+    li class='breadcrumb-item active' aria-current='page' = @owner.name
 
-table border=1
+table class='table table-bordered table-striped'
   thead
-    tr
-      th Owner
-  tbody
-    tr
-      td = @owner.name
     tr
       th Repos
   tbody

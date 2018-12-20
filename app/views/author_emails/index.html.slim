@@ -1,16 +1,15 @@
-=> link_to 'Back to Repos', owner_repos_path
+nav aria-label='breadcrumb'
+  ol class='breadcrumb'
+    li class='breadcrumb-item active'
+      a href=owners_path Owners
+    li class='breadcrumb-item'
+      a href=owner_repos_path = @owner.name
+    li class='breadcrumb-item' aria-current='page' = @repo.name
 
-table border=1
+table class='table table-bordered table-striped'
   thead
     tr
-      th Owner
-      th Repo
-  tbody
-    tr
-      td = @owner.name
-      td = @repo.name
-    tr
-      th colspan=2 Author emails
+      th Author emails
   tbody
     - unless @author_emails.nil?
       - @author_emails.each do |author_email|

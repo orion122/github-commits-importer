@@ -10,6 +10,16 @@
   </head>
 
   <body>
+  <div class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <a class="navbar-brand" href="/">Github Commits Importer</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item <%= 'active' if current_page?(owners_path) %>">
+          <a class="nav-link" href=<%= owners_path %>>Owners</a>
+        </li>
+      </ul>
+    </div>
+  </div>
     <%= yield %>
   </body>
 </html>

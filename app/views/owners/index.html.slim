@@ -1,9 +1,11 @@
-= link_to 'Back', root_path
+nav aria-label='breadcrumb'
+  ol class='breadcrumb'
+    li class='breadcrumb-item active' aria-current='page' Owners
 
-table
+table class='table table-bordered table-striped'
   thead
     tr
-      th Owners
+      th scope='col' Owners
   tbody
     - unless @owners.nil?
       - @owners.each do |owner|
