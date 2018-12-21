@@ -105,7 +105,8 @@ RSpec.describe CommitsController, type: :controller do
   end
 
   describe 'POST #destroy' do
-    let(:messages) { ['make:auth', 'first commit'] }
+    let(:messages_not_deleted) { ['make:auth', 'first commit'] }
+    let(:messages_deleted) { ['add categories', 'create admin dashboard'] }
     let(:owner) { 'orion122' }
     let(:repo) { 'laravel-blog' }
     let(:author_email) { 'yaru@bk.ru' }
@@ -118,11 +119,14 @@ RSpec.describe CommitsController, type: :controller do
             author_email: author_email
         }
       end
-      post :destroy, params: { commit_ids: [1, 2] }
+
+      commit_ids = Commit.where(message: messages_deleted).pluck(:id)
+
+      post :destroy, params: { commit_ids: commit_ids }
     end
 
     it 'delete the first two commits' do
-      expect(Commit.pluck(:message)).to eq(messages)
+      expect(Commit.pluck(:message)).to eq(messages_not_deleted)
     end
   end
 
@@ -142,12 +146,21 @@ RSpec.describe CommitsController, type: :controller do
     end
 
     it 'return first 10 commits' do
-      get :index, params: { owner_id: 1, repo_id: 1, author_email_id: 1 }
+      owner = Owner.find_by(name: 'orion122')
+      repo = Repo.find_by(name: 'ruby-koans-solutions')
+      author_email = AuthorEmail.find_by(email: 'yaru@bk.ru')
+
+      get :index, params: { owner_id: owner, repo_id: repo, author_email_id: author_email }
       expect(assigns(:commits)).to eq(Commit.limit(10))
     end
 
     it 'return last 10 commits' do
-      get :index, params: { owner_id: 1, repo_id: 1, author_email_id: 1, page: 2 }
+      owner = Owner.find_by(name: 'orion122')
+      repo = Repo.find_by(name: 'ruby-koans-solutions')
+      author_email = AuthorEmail.find_by(email: 'yaru@bk.ru')
+      page = 2
+
+      get :index, params: { owner_id: owner, repo_id: repo, author_email_id: author_email, page: page }
       expect(assigns(:commits)).to eq(Commit.limit(10).offset(10))
     end
   end
