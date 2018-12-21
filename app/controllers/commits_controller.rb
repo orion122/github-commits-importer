@@ -15,9 +15,9 @@ class CommitsController < ApplicationController
       github = Github.new(auto_pagination: true)
       commits_data = github.repos.commits.all(owner, repo)
 
-      messages = commits_data.map do |commit_data|
-        { message: commit_data.commit.message } if commit_data.commit.author.email == author_email
-      end
+      messages = commits_data
+                     .select { |commit_data| commit_data.commit.author.email == author_email }
+                     .map { |commit_data| { message: commit_data.commit.message } }
 
       unless messages.any?
         flash[:notice] = 'Commits not found'
