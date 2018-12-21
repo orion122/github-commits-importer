@@ -32,6 +32,8 @@ class CommitsController < ApplicationController
 
     rescue Github::Error::NotFound
       flash[:notice] = 'Not found owner/repo'
+    rescue Github::Error::Forbidden
+      flash[:notice] = 'API rate limit exceeded'
     end
 
     redirect_back(fallback_location: root_path)
