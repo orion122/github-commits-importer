@@ -1,24 +1,13 @@
-# README
+# Github Commits Importer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Run docker with PostgreSQL
+`docker-compose up -d`
 
-Things you may want to cover:
+## Database init
+`rails db:create RAILS_ENV=production`, `rails db:migrate RAILS_ENV=production`
 
-* Ruby version
+## Run app
+`rails s -e production`
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Run tests
+`rails db:create RAILS_ENV=test`, `rails db:migrate RAILS_ENV=test`, `bundle exec rspec`
