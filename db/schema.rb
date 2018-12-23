@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_23_104558) do
+ActiveRecord::Schema.define(version: 2018_12_23_144445) do
 
   create_table "author_emails", force: :cascade do |t|
     t.string "email"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2018_12_23_104558) do
   create_table "author_emails_repos", force: :cascade do |t|
     t.integer "author_email_id"
     t.integer "repo_id"
+    t.index ["author_email_id", "repo_id"], name: "index_author_emails_repos_on_author_email_id_and_repo_id", unique: true
   end
 
   create_table "commits", force: :cascade do |t|
