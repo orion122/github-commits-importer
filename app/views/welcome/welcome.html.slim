@@ -5,13 +5,13 @@ main class='container'
     = form_with(url: 'import', local: true, method: 'post') do
       .form-row.align-items-center
         .col-sm-3.my-1
-          = text_field_tag(:owner, 'orion122', class: 'form-control', placeholder: 'Owner')
+          = text_field_tag(:owner, nil, class: 'form-control', placeholder: 'Owner', required: true)
 
         .col-sm-3.my-1
-          = text_field_tag(:repo, 'BotBoobot', class: 'form-control', placeholder: 'Repo')
+          = text_field_tag(:repo, nil, class: 'form-control', placeholder: 'Repo', required: true)
 
         .col-sm-3.my-1
-          = text_field_tag(:author_email, nil, type: :email, class: 'form-control', placeholder: 'Email')
+          = text_field_tag(:author_email, nil, type: :email, class: 'form-control', placeholder: 'Email', required: true)
 
         .col-auto.my-1
           = button_tag 'Import commits', class: 'btn btn-primary'
