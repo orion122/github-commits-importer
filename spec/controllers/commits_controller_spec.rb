@@ -4,8 +4,10 @@ RSpec.describe CommitsController, type: :controller do
   describe 'POST #import' do
     let(:messages) { ['add categories', 'create admin dashboard', 'make:auth', 'first commit'] }
     let(:owner) { 'orion122' }
-    let(:repo) { 'laravel-blog' }
-    let(:author_email) { 'yaru@bk.ru' }
+    let(:repo1) { 'laravel-blog' }
+    let(:repo2) { 'ru-test-assignments' }
+    let(:author_email1) { 'yaru@bk.ru' }
+    let(:author_email2) { 'orion122@users.noreply.github.com' }
     let(:nonexistent_author_email) { 'author@mail.ru' }
 
     context 'with existing email' do
@@ -13,8 +15,8 @@ RSpec.describe CommitsController, type: :controller do
         VCR.use_cassette('laravel-blog') do
           post :import, params: {
               owner: owner,
-              repo: repo,
-              author_email: author_email
+              repo: repo1,
+              author_email: author_email1
           }
         end
       end
@@ -28,11 +30,15 @@ RSpec.describe CommitsController, type: :controller do
       end
 
       it 'create repo' do
-        expect(Repo.last.name).to eq(repo)
+        expect(Repo.last.name).to eq(repo1)
       end
 
       it 'create author email' do
-        expect(AuthorEmail.last.email).to eq(author_email)
+        expect(AuthorEmail.last.email).to eq(author_email1)
+      end
+
+      it 'create one record in author_emails_repos' do
+        expect(AuthorEmailsRepo.count).to eq(1)
       end
 
       it 'flashes a success message' do
@@ -45,7 +51,7 @@ RSpec.describe CommitsController, type: :controller do
         VCR.use_cassette('nonexistent_email') do
           post :import, params: {
               owner: owner,
-              repo: repo,
+              repo: repo1,
               author_email: nonexistent_author_email
           }
         end
@@ -100,6 +106,64 @@ RSpec.describe CommitsController, type: :controller do
 
       it 'flashes a notice message' do
         expect(flash[:notice]).to eq('Not found owner/repo')
+      end
+    end
+
+    context 'two posts with same author_email and different repo' do
+      before do
+        VCR.use_cassette('mix_request1') do
+          post :import, params: {
+              owner: owner,
+              repo: repo1,
+              author_email: author_email1
+          }
+          post :import, params: {
+              owner: owner,
+              repo: repo2,
+              author_email: author_email1
+          }
+        end
+      end
+
+      it 'create two records in repos' do
+        expect(Repo.count).to eq(2)
+      end
+
+      it 'create one record in author_emails' do
+        expect(AuthorEmail.count).to eq(1)
+      end
+
+      it 'create two records in author_emails_repos' do
+        expect(AuthorEmailsRepo.count).to eq(2)
+      end
+    end
+
+    context 'two posts with same repo and different author_email' do
+      before do
+        VCR.use_cassette('mix_request2') do
+          post :import, params: {
+              owner: owner,
+              repo: repo1,
+              author_email: author_email1
+          }
+          post :import, params: {
+              owner: owner,
+              repo: repo1,
+              author_email: author_email2
+          }
+        end
+      end
+
+      it 'create one records in repos' do
+        expect(Repo.count).to eq(1)
+      end
+
+      it 'create two record in author_emails' do
+        expect(AuthorEmail.count).to eq(2)
+      end
+
+      it 'create two records in author_emails_repos' do
+        expect(AuthorEmailsRepo.count).to eq(2)
       end
     end
   end
