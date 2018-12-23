@@ -1,4 +1,5 @@
 # Github Commits Importer
+[![Build Status](https://travis-ci.org/orion122/github-commits-importer.svg?branch=master)](https://travis-ci.org/orion122/github-commits-importer)
 
 ## Run docker with PostgreSQL
 `docker-compose up -d`
