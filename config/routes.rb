@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   root 'welcome#welcome'
   post '/import', to: 'commits#import'
-  post '/save', to: 'commits#save'
   delete '/destroy', to: 'commits#destroy'
 
   resources :owners, only: [:index] do
