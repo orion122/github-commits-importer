@@ -3,7 +3,8 @@ class CommitsController < ApplicationController
     @owner = Owner.find(params[:owner_id])
     @repo = Repo.find(params[:repo_id])
     @author_email = AuthorEmail.find(params[:author_email_id])
-    @commits = @repo.author_emails.find(params[:author_email_id]).commits.page(params[:page]).per(10)
+    author_emails_repo = AuthorEmailsRepo.find_by(repo: @repo, author_email: @author_email)
+    @commits = author_emails_repo.commits.page(params[:page]).per(10)
   end
 
   def import
@@ -47,13 +48,14 @@ class CommitsController < ApplicationController
   def save?(owner_name, repo_name, email, messages)
     owner = Owner.where(name: owner_name).first_or_create
     repo = owner.repos.where(name: repo_name).first_or_create
-    author_email = repo.author_emails.where(email: email).first_or_create
-    commits_old = repo.commits.where(author_email: author_email)
+    author_email = AuthorEmail.where(email: email).first_or_create
+    author_emails_repo = AuthorEmailsRepo.where(repo: repo, author_email: author_email).first_or_create
+    commits_old = author_emails_repo.commits
 
     begin
       commits_old.transaction do
         commits_old.destroy_all
-        author_email.commits.create(messages)
+        author_emails_repo.commits.create(messages)
         return true
       end
     rescue ActiveRecord::StatementInvalid

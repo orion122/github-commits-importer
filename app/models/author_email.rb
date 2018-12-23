@@ -1,4 +1,4 @@
 class AuthorEmail < ApplicationRecord
-  has_and_belongs_to_many :repos
-  has_many :commits
+  has_many :author_emails_repos
+  has_many :repos, through: :author_emails_repos
 end

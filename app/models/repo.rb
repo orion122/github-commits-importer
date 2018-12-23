@@ -1,5 +1,5 @@
 class Repo < ApplicationRecord
   belongs_to :owner
-  has_and_belongs_to_many :author_emails
-  has_many :commits, through: :author_emails
+  has_many :author_emails_repos
+  has_many :author_emails, through: :author_emails_repos
 end

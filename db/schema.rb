@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_11_125001) do
+ActiveRecord::Schema.define(version: 2018_12_23_104558) do
 
   create_table "author_emails", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_author_emails_on_email", unique: true
   end
 
   create_table "author_emails_repos", force: :cascade do |t|
@@ -25,16 +26,17 @@ ActiveRecord::Schema.define(version: 2018_12_11_125001) do
 
   create_table "commits", force: :cascade do |t|
     t.string "message"
-    t.integer "author_email_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_email_id"], name: "index_commits_on_author_email_id"
+    t.integer "author_emails_repo_id"
+    t.index ["author_emails_repo_id"], name: "index_commits_on_author_emails_repo_id"
   end
 
   create_table "owners", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_owners_on_name", unique: true
   end
 
   create_table "repos", force: :cascade do |t|
