@@ -18,8 +18,16 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  adapter: postgresql
+  username: postgres
+  host: 127.0.0.1
+  database: github_commits_test
+  password: pg_passwd
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  username: postgres 
+  host: 127.0.0.1
+  database: github_commits
+  password: pg_passwd
