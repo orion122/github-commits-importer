@@ -7,7 +7,6 @@ table class='table table-bordered table-striped'
     tr
       th scope='col' Owners
   tbody
-    - unless @owners.nil?
-      - @owners.each do |owner|
-        tr
-          td = link_to owner.name, owner_repos_path(owner)
+    - @owners.each do |owner|
+      tr
+        td = link_to owner.name, owner_repos_path(owner)

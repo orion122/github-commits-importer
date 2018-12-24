@@ -9,7 +9,6 @@ table class='table table-bordered table-striped'
     tr
       th Repos
   tbody
-    - unless @repos.nil?
-      - @repos.each do |repo|
-        tr
-          td = link_to repo.name, owner_repo_author_emails_path(repo.owner, repo)
+    - @repos.each do |repo|
+      tr
+        td = link_to repo.name, owner_repo_author_emails_path(repo.owner, repo)

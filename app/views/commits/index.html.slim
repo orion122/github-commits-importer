@@ -14,10 +14,9 @@ table class='table table-bordered table-striped'
       th Commits
       th = button_tag 'Remove', class: 'remove_commit btn btn-danger'
   tbody
-    - unless @commits.nil?
-      - @commits.each do |commit|
-        tr
-          td = commit.message
-          td = check_box_tag 'remove', commit.id
+    - @commits.each do |commit|
+      tr
+        td = commit.message
+        td = check_box_tag 'remove', commit.id
 
 = paginate @commits, theme: 'twitter-bootstrap-4'
