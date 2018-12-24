@@ -1,2 +1,0 @@
-module AuthorEmailsHelper
-end
